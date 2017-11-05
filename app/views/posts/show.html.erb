@@ -1,0 +1,35 @@
+<p>
+	<%= render @post.categories %>
+	<p class="pull-right">
+		<% if logged_in? %>
+			[<%= link_to "Edit this post", edit_post_path(@post) %>]
+		<% end %>
+	</p>
+</p>
+
+<%= render partial: "shared/content_title", locals: { title: @post.title } %>
+<p>
+	<%= @post.description %>
+</p>
+<hr/>
+
+<% if logged_in? %>
+	<%= form_for [@post, @comment] do |f| %>
+		<div class="control-group">
+			<%= render "shared/errors", obj: @comment %>
+			<%= f.label :body,  'Leave a comment' %>
+			<%= f.text_area :body, rows: 3, class: "span4" %>
+		</div>	
+		<%= f.submit "Create Comment", class: "btn btn-primary" %>
+	<% end %>
+<% end %>
+
+<h5>Comments:</h5>
+<% @post.comments.each do |comment| %>
+	<%= render 'comments/comment', comment: comment %>
+<% end %>
+<% if @post.comments.length == 0 %>
+	<div class="well span8">
+		<p>No comments posted yet</p>
+	</div>
+<% end %>
